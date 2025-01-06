@@ -6,6 +6,7 @@ import PersonalInfoStep from './components/PersonalInfoStep';
 import JobMatchesStep from './components/JobMatchesStep';
 import SkillGapPlanStep from './components/SkillGapPlanStep';
 import { searchJobs, JobApiError } from '../services/jobApi';
+import { generateSkillGapPlan } from '../services/geminiService';
 
 const validateForm = (data: FormData): boolean => {
   return !!(
@@ -110,33 +111,18 @@ const JobSearchPage: FC = () => {
 
   const handleJobSelect = async (job: JobMatch) => {
     setSelectedJob(job);
-    const currentSkillsArray = formData.experience.keySkills.split(',').map((s: string) => s.trim());
-    setSkillGapPlan({
-      currentSkills: currentSkillsArray,
-      requiredSkills: ["Product Strategy", "Agile Methodologies", "Data Analysis"],
-      gapAnalysis: "Your background shows strong leadership and project management...",
-      actionPlan: {
-        immediate: [
-          "Complete Product Management refresher course",
-          "Join Product Management communities"
-        ],
-        shortTerm: [
-          "Take Agile certification",
-          "Build sample product roadmaps"
-        ],
-        longTerm: [
-          "Develop mentorship relationships",
-          "Lead mock product sprints"
-        ]
-      },
-      estimatedTimeframe: "2-3 months",
-      resources: {
-        courses: ["PM Fundamentals Refresh", "Modern Agile Practice"],
-        workshops: ["Return to Product Management", "Leadership Skills"],
-        mentorship: ["Product Leader Network", "Women in Product"]
-      }
-    });
-    setCurrentStep('plan');
+    setIsLoading(true);
+
+    try {
+      const plan = await generateSkillGapPlan(job, formData);
+      setSkillGapPlan(plan);
+      setCurrentStep('plan');
+    } catch (error) {
+      console.error('Error generating plan:', error);
+      setError('Failed to generate career plan. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

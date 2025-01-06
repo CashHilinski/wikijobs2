@@ -6,103 +6,108 @@ import { JobMatch, SkillGapPlan } from '../types';
 interface SkillGapPlanStepProps {
   selectedJob: JobMatch | null;
   skillGapPlan: SkillGapPlan | null;
+  isLoading?: boolean;
 }
 
-export const SkillGapPlanStep: FC<SkillGapPlanStepProps> = ({ selectedJob, skillGapPlan }) => {
-  if (!selectedJob || !skillGapPlan) return null;
+const SkillGapPlanStep: FC<SkillGapPlanStepProps> = ({ 
+  selectedJob, 
+  skillGapPlan,
+  isLoading = false 
+}) => {
+  if (!selectedJob) return null;
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white mb-4"></div>
+          <p className="text-white/70">Generating your personalized return plan...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!skillGapPlan) return null;
 
   return (
     <div className="space-y-8">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl font-semibold text-white mb-4">Your Return Plan</h2>
-        <p className="text-white/60 text-lg font-light">
-          Here's your personalized plan to successfully transition into this role.
-        </p>
+      {/* Job Overview */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold text-white">Return Plan for {selectedJob.title}</h2>
+        <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+          <p className="text-white/70">Company: {selectedJob.company}</p>
+          <p className="text-white/70">Location: {selectedJob.location}</p>
+          <p className="text-white/70">Salary: {selectedJob.salary}</p>
+        </div>
       </div>
 
-      <div className="space-y-8">
-        <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-          <h3 className="text-xl font-medium text-white mb-4">Gap Analysis</h3>
+      {/* Skills Analysis */}
+      <div className="space-y-4">
+        <h3 className="text-xl font-semibold text-white">Skills Analysis</h3>
+        <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+          <h4 className="font-medium text-white mb-2">Gap Analysis</h4>
           <p className="text-white/70">{skillGapPlan.gapAnalysis}</p>
         </div>
+        <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+          <h4 className="font-medium text-white mb-2">Required Skills</h4>
+          <ul className="list-disc list-inside text-white/70 space-y-1">
+            {skillGapPlan.requiredSkills.map((skill, index) => (
+              <li key={index}>{skill}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-            <h4 className="text-lg font-medium text-white mb-4">Immediate Steps</h4>
-            <ul className="space-y-2">
-              {skillGapPlan.actionPlan.immediate.map((step, index) => (
-                <li key={index} className="text-white/70">• {step}</li>
+      {/* Action Plan */}
+      <div className="space-y-4">
+        <h3 className="text-xl font-semibold text-white">Action Plan</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+            <h4 className="font-medium text-white mb-2">Quick Wins (2 Weeks)</h4>
+            <ul className="list-disc list-inside text-white/70 space-y-1">
+              {skillGapPlan.actionPlan.immediate.map((action, index) => (
+                <li key={index}>{action}</li>
               ))}
             </ul>
           </div>
-
-          <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-            <h4 className="text-lg font-medium text-white mb-4">Short-term Goals</h4>
-            <ul className="space-y-2">
-              {skillGapPlan.actionPlan.shortTerm.map((step, index) => (
-                <li key={index} className="text-white/70">• {step}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-            <h4 className="text-lg font-medium text-white mb-4">Long-term Vision</h4>
-            <ul className="space-y-2">
-              {skillGapPlan.actionPlan.longTerm.map((step, index) => (
-                <li key={index} className="text-white/70">• {step}</li>
+          <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+            <h4 className="font-medium text-white mb-2">3-Month Goals</h4>
+            <ul className="list-disc list-inside text-white/70 space-y-1">
+              {skillGapPlan.actionPlan.shortTerm.map((action, index) => (
+                <li key={index}>{action}</li>
               ))}
             </ul>
           </div>
         </div>
+      </div>
 
-        <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-          <h3 className="text-xl font-medium text-white mb-6">Resources & Support</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <h4 className="text-lg font-medium text-white mb-4">Recommended Courses</h4>
-              <ul className="space-y-2">
-                {skillGapPlan.resources.courses.map((course, index) => (
-                  <li key={index} className="text-white/70">• {course}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-medium text-white mb-4">Workshops</h4>
-              <ul className="space-y-2">
-                {skillGapPlan.resources.workshops.map((workshop, index) => (
-                  <li key={index} className="text-white/70">• {workshop}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-medium text-white mb-4">Mentorship Programs</h4>
-              <ul className="space-y-2">
-                {skillGapPlan.resources.mentorship.map((program, index) => (
-                  <li key={index} className="text-white/70">• {program}</li>
-                ))}
-              </ul>
-            </div>
+      {/* Resources */}
+      <div className="space-y-4">
+        <h3 className="text-xl font-semibold text-white">Recommended Resources</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+            <h4 className="font-medium text-white mb-2">Courses</h4>
+            <ul className="list-disc list-inside text-white/70 space-y-1">
+              {skillGapPlan.resources.courses.map((course, index) => (
+                <li key={index}>{course}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+            <h4 className="font-medium text-white mb-2">Certification</h4>
+            <p className="text-white/70">{skillGapPlan.resources.certification}</p>
+          </div>
+          <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+            <h4 className="font-medium text-white mb-2">Networking</h4>
+            <p className="text-white/70">{skillGapPlan.resources.networking}</p>
           </div>
         </div>
+      </div>
 
-        <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-xl font-medium text-white mb-2">Estimated Timeline</h3>
-              <p className="text-white/70">{skillGapPlan.estimatedTimeframe}</p>
-            </div>
-            <a 
-              href={selectedJob.applyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white text-black px-6 py-2 rounded-lg font-medium hover:bg-white/90 transition-colors"
-            >
-              Apply Now
-            </a>
-          </div>
-        </div>
+      <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+        <p className="text-white/70">
+          Estimated time to job readiness: <span className="text-white font-medium">{skillGapPlan.estimatedTimeframe} months</span>
+        </p>
       </div>
     </div>
   );
