@@ -73,10 +73,10 @@ const HeroSection = () => (
             <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
           </Link>
           <Link 
-            href="/about"
+            href="mailto:arlan@hanlantech.net"
             className="group relative inline-flex items-center gap-3 text-white/90 hover:text-white px-8 py-4 text-lg font-light tracking-wide transition-all duration-300"
           >
-            <span>Learn More</span>
+            <span>Talk to Us</span>
             <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
           </Link>
         </motion.div>

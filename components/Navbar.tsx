@@ -25,6 +25,7 @@ const Navbar: FC = () => {
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
               <span className="text-white font-semibold text-xl">WikiJobs</span>
+              <span className="text-white font-semibold text-xs">beta</span>
             </Link>
           </div>
 

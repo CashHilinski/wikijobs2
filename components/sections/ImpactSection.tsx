@@ -16,7 +16,7 @@ const metrics = [
   },
   {
     label: 'Partner Companies',
-    value: '500+',
+    value: '50+',
     description: 'Fair-chance employers in our network'
   },
   {
