@@ -41,8 +41,8 @@ export interface JobMatch {
 }
 
 export interface SkillGapPlan {
-  requiredSkills: string[];
   gapAnalysis: string;
+  requiredSkills: string[];
   actionPlan: {
     immediate: string[];
     shortTerm: string[];
@@ -52,7 +52,7 @@ export interface SkillGapPlan {
     certification: string;
     networking: string;
   };
-  estimatedTimeframe: string;
+  estimatedTimeframe: number;
 }
 
 export interface JobApiResponse {

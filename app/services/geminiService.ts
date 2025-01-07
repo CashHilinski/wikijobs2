@@ -1,33 +1,42 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
 const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+
+if (!GEMINI_API_KEY) {
+  throw new Error('NEXT_PUBLIC_GEMINI_API_KEY is not set in environment variables');
+}
+
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 export async function generateSkillGapPlan(jobDetails: any, userProfile: any) {
+  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+
   const prompt = `
-    As a career advisor, create a return-to-work plan using EXACTLY this format:
+    As a career advisor, create a return-to-work plan. Follow this EXACT format with no deviations:
 
     SKILLS GAP:
-    [Write exactly 2 sentences about key skill gaps]
+    [First sentence about primary skill gap.] [Second sentence about secondary skill gap.]
 
     REQUIRED SKILLS:
-    - [Most important skill]
-    - [Second most important skill]
-    - [Third most important skill]
-    - [Fourth most important skill]
-    - [Fifth most important skill]
+    - [Skill 1]
+    - [Skill 2]
+    - [Skill 3]
+    - [Skill 4]
+    - [Skill 5]
 
     QUICK WINS (Next 2 weeks):
-    - [Specific action 1]
-    - [Specific action 2]
-    - [Specific action 3]
+    - [Action 1]
+    - [Action 2]
+    - [Action 3]
 
     3-MONTH PLAN:
-    - [Measurable goal 1]
-    - [Measurable goal 2]
-    - [Measurable goal 3]
+    - [Goal 1]
+    - [Goal 2]
+    - [Goal 3]
 
     RESOURCES:
-    - Course 1: [Specific course name and platform]
-    - Course 2: [Specific course name and platform]
+    - Course 1: [Course name] ([Platform])
+    - Course 2: [Course name] ([Platform])
     - Certification: [Specific certification name]
     - Network: [Specific networking action]
 
@@ -41,79 +50,77 @@ export async function generateSkillGapPlan(jobDetails: any, userProfile: any) {
     Skills: ${userProfile.experience.keySkills}
     Gap: ${userProfile.personal.yearsOutOfWork} years
 
-    Keep responses concise and specific. No additional text or explanations.
-  `;
+    Important:
+    1. Use bullet points ONLY with single hyphens (-)
+    2. Do not use asterisks (*) or other markers
+    3. Keep each section separate with exactly one blank line
+    4. Do not include section names in the content
+    5. Do not repeat content across sections
+    `;
 
   try {
-    const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{ text: prompt }]
-        }]
-      })
+    const result = await model.generateContent({
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      generationConfig: {
+        temperature: 0.7,
+        topK: 40,
+        topP: 0.95,
+        maxOutputTokens: 1024,
+      }
     });
 
-    const data = await response.json();
+    const response = result.response;
+    const aiResponse = response.text();
     
-    if (!response.ok) {
-      throw new Error(data.error?.message || 'Failed to generate plan');
+    try {
+      return structureAIResponse(aiResponse);
+    } catch (parseError) {
+      console.error('Error parsing AI response:', parseError);
+      return generateSmartFallbackPlan(jobDetails, userProfile);
     }
-
-    // Parse the AI response and structure it
-    const aiResponse = data.candidates[0].content.parts[0].text;
-    
-    // Parse and structure the AI response into the required format
-    return structureAIResponse(aiResponse);
   } catch (error) {
     console.error('Gemini API Error:', error);
-    throw error;
+    return generateSmartFallbackPlan(jobDetails, userProfile);
   }
 }
 
-function structureAIResponse(aiResponse: string): any {
-  // Helper function to extract section content
+function structureAIResponse(aiResponse: string) {
   const getSection = (sectionName: string): string => {
     const regex = new RegExp(`${sectionName}:\\s*([\\s\\S]*?)(?=\\n\\s*[A-Z]+:|$)`, 'i');
-    return (aiResponse.match(regex)?.[1] || '').trim();
+    const match = aiResponse.match(regex);
+    return match ? match[1].trim() : '';
   };
 
-  // Helper function to extract bullet points
   const getBulletPoints = (text: string): string[] => {
+    if (!text) return [];
     return text
       .split('\n')
       .map(line => line.trim())
       .filter(line => line.startsWith('-'))
-      .map(line => line.replace(/^-\s*/, ''))
+      .map(line => line.slice(1).trim())
       .filter(Boolean);
   };
 
-  // Extract resources with specific prefixes
   const getResources = (text: string) => {
-    const courses = text
-      .split('\n')
-      .filter(line => line.includes('Course'))
-      .map(line => line.replace(/^-\s*Course \d+:\s*/, ''))
-      .filter(Boolean);
+    if (!text) return { courses: [], certification: '', network: '' };
+    
+    const lines = text.split('\n').map(line => line.trim());
+    
+    const courses = lines
+      .filter(line => line.startsWith('- Course'))
+      .map(line => line.replace(/^-\s*Course \d+:\s*/, '').trim());
 
-    const certification = text
-      .split('\n')
-      .find(line => line.includes('Certification:'))
-      ?.replace(/^-\s*Certification:\s*/, '');
+    const certification = lines
+      .find(line => line.startsWith('- Certification:'))
+      ?.replace(/^-\s*Certification:\s*/, '')
+      .trim() || '';
 
-    const network = text
-      .split('\n')
-      .find(line => line.includes('Network:'))
-      ?.replace(/^-\s*Network:\s*/, '');
+    const network = lines
+      .find(line => line.startsWith('- Network:'))
+      ?.replace(/^-\s*Network:\s*/, '')
+      .trim() || '';
 
-    return {
-      courses,
-      certification,
-      network
-    };
+    return { courses, certification, network };
   };
 
   // Extract sections
@@ -123,20 +130,79 @@ function structureAIResponse(aiResponse: string): any {
   const threeMoPlan = getBulletPoints(getSection('3-MONTH PLAN'));
   const resourcesSection = getSection('RESOURCES');
   const { courses, certification, network } = getResources(resourcesSection);
-  const timeToReady = getSection('TIME TO READY').replace(/[^0-9-]+/g, '');
+  const timeToReady = parseInt(getSection('TIME TO READY').replace(/[^0-9-]+/g, '')) || 3;
+
+  // Validate and provide fallbacks
+  const validatedGapAnalysis = gapAnalysis || 'Analysis not available';
+  const validatedSkills = requiredSkills.length >= 3 ? requiredSkills : ['No skills provided'];
+  const validatedQuickWins = quickWins.length >= 2 ? quickWins : ['Update resume', 'Research company', 'Network'];
+  const validatedPlan = threeMoPlan.length >= 2 ? threeMoPlan : ['Complete relevant certification', 'Build portfolio', 'Apply to positions'];
+  const validatedCourses = courses.length >= 2 ? courses : ['Recommended course not specified'];
 
   return {
-    requiredSkills: requiredSkills.length ? requiredSkills : ['No skills provided'],
-    gapAnalysis: gapAnalysis || 'Analysis not available',
+    gapAnalysis: validatedGapAnalysis,
+    requiredSkills: validatedSkills,
     actionPlan: {
-      immediate: quickWins.length ? quickWins : ['Update resume', 'Research company', 'Network'],
-      shortTerm: threeMoPlan.length ? threeMoPlan : ['Complete relevant certification', 'Build portfolio', 'Apply to positions']
+      immediate: validatedQuickWins,
+      shortTerm: validatedPlan
     },
     resources: {
-      courses: courses.length ? courses : ['Recommended course not specified'],
+      courses: validatedCourses,
       certification: certification || 'Certification not specified',
       networking: network || 'Networking suggestion not specified'
     },
-    estimatedTimeframe: timeToReady || "3"
+    estimatedTimeframe: timeToReady
+  };
+}
+
+function generateSmartFallbackPlan(jobDetails: any, userProfile: any) {
+  const gapYears = parseInt(userProfile.personal.yearsOutOfWork) || 1;
+  const skillsNeeded = new Set(jobDetails.requirements);
+  const currentSkills = new Set(userProfile.experience.keySkills.split(',').map((s: string) => s.trim()));
+  
+  const missingSkills = [...skillsNeeded].filter(skill => !currentSkills.has(skill));
+  const baseTime = Math.min(Math.max(gapYears, 2), 4);
+  const timeForSkills = Math.ceil(missingSkills.length / 2);
+  const totalTime = Math.min(baseTime + timeForSkills, 6);
+
+  return {
+    gapAnalysis: `Based on your ${gapYears} year${gapYears > 1 ? 's' : ''} career break, we've identified ${missingSkills.length} key skills to develop for the ${jobDetails.title} role. Your background in ${userProfile.experience.lastRole} provides a strong foundation, but updating industry knowledge and specific technical skills will be crucial.`,
+    
+    requiredSkills: [
+      ...jobDetails.requirements.slice(0, 3),
+      "Current Industry Best Practices",
+      "Modern Tools & Technologies"
+    ],
+
+    actionPlan: {
+      immediate: [
+        `Update your ${jobDetails.category} skills through online courses`,
+        `Revise your resume to highlight transferable skills from ${userProfile.experience.lastRole}`,
+        `Join ${jobDetails.category} professional networks and communities`,
+        'Start a personal project to demonstrate current skills',
+        'Create a learning roadmap based on job requirements'
+      ],
+      shortTerm: [
+        `Complete ${jobDetails.category} certification program`,
+        "Build 2-3 relevant portfolio projects",
+        `Attend ${jobDetails.category} industry conferences or meetups`,
+        'Participate in industry workshops or bootcamps',
+        'Connect with professionals in target companies'
+      ]
+    },
+
+    resources: {
+      courses: [
+        `${jobDetails.category} Essentials (LinkedIn Learning)`,
+        `Modern ${jobDetails.category} Practices (Udemy)`,
+        `Advanced ${jobDetails.category} Skills (Coursera)`,
+        'Industry-Specific Workshops',
+        'Professional Development Seminars'
+      ],
+      certification: `Professional ${jobDetails.category} Certification`,
+      networking: `Join ${jobDetails.category} professional groups and attend industry events`
+    },
+
+    estimatedTimeframe: totalTime
   };
 } 

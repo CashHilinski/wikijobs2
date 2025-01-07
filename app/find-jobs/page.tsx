@@ -110,19 +110,32 @@ const JobSearchPage: FC = () => {
   };
 
   const handleJobSelect = async (job: JobMatch) => {
-    setSelectedJob(job);
-    setIsLoading(true);
-
     try {
+      // First set loading and move to plan view
+      setIsLoading(true);
+      setError(null);
+      setSelectedJob(job);
+      setCurrentStep('plan');
+
+      // Then generate the plan
       const plan = await generateSkillGapPlan(job, formData);
       setSkillGapPlan(plan);
-      setCurrentStep('plan');
     } catch (error) {
       console.error('Error generating plan:', error);
       setError('Failed to generate career plan. Please try again.');
+      setCurrentStep('matches');
+      setSelectedJob(null);
+      setSkillGapPlan(null);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleBack = () => {
+    setCurrentStep('matches');
+    setSkillGapPlan(null);
+    setSelectedJob(null);
+    setError(null);
   };
 
   return (
@@ -161,6 +174,8 @@ const JobSearchPage: FC = () => {
               <SkillGapPlanStep 
                 selectedJob={selectedJob}
                 skillGapPlan={skillGapPlan}
+                isLoading={isLoading}
+                onBack={handleBack}
               />
             )}
           </div>

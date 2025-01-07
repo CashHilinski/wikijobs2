@@ -36,7 +36,7 @@ const DemoVideo: FC = () => {
         <motion.video
           ref={videoRef}
           className="w-full h-full object-cover"
-          src="/demo.mp4"
+          src="/wikijobs_demovideo.mp4"
           loop
           muted
           playsInline

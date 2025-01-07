@@ -5,17 +5,12 @@ import { motion } from 'framer-motion';
 
 const metrics = [
   {
-    label: 'Jobs Available',
+    label: 'People Reached',
     value: '10M+',
-    description: 'Open positions from our global catalog'
+    description: 'Professionals impacted by our platform'
   },
   {
-    label: 'Monthly Users',
-    value: '1.5M+',
-    description: 'Active job seekers using our platform'
-  },
-  {
-    label: 'Success Stories',
+    label: 'Jobs Connected',
     value: '10k+',
     description: 'Career returners placed in new roles'
   },
@@ -23,6 +18,11 @@ const metrics = [
     label: 'Partner Companies',
     value: '500+',
     description: 'Fair-chance employers in our network'
+  },
+  {
+    label: 'Success Rate',
+    value: '94%',
+    description: 'Return-to-work program completion'
   }
 ];
 

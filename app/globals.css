@@ -117,4 +117,71 @@ body {
 
 .animate-subtle-pulse {
   animation: subtle-pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@layer utilities {
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
+  }
+
+  .animate-spin-slower {
+    animation: spin 4s linear infinite;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float 3s ease-in-out infinite;
+    animation-delay: 1s;
+  }
+
+  .animate-float-reverse {
+    animation: float 3s ease-in-out infinite reverse;
+    animation-delay: 2s;
+  }
+
+  .animate-progress {
+    animation: progress 12s ease-in-out;
+  }
+
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .delay-600 {
+    animation-delay: 600ms;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-10px) scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes progress {
+  0% {
+    width: 0%;
+    background-position: 0% 50%;
+  }
+  100% {
+    width: 100%;
+    background-position: 100% 50%;
+  }
 } 
