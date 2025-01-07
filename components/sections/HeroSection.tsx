@@ -31,22 +31,6 @@ const HeroSection = () => (
     
     <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
       <div className="text-center">
-        <motion.div 
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
-          className="flex flex-col items-center justify-center mb-12 space-y-4"
-        >
-          <div className="flex items-center space-x-4">
-            <img src="/yip-logo.svg" alt="YIP Logo" className="h-8" />
-            <span className="text-white/50">×</span>
-            <img src="/mit-logo.svg" alt="MIT Logo" className="h-8" />
-          </div>
-          <div className="text-xl font-light tracking-wide text-white/70">
-            Powered by YIP and The Perrin Center for Policy
-          </div>
-        </motion.div>
-
         <motion.h1 
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -95,28 +79,6 @@ const HeroSection = () => (
             <span>Learn More</span>
             <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
           </Link>
-        </motion.div>
-
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.7, ease: [0.23, 1, 0.32, 1] }}
-          className="mt-16 flex justify-center items-center space-x-8"
-        >
-          <div className="text-center">
-            <div className="text-4xl font-semibold text-white">10M+</div>
-            <div className="text-white/70">Jobs Available</div>
-          </div>
-          <div className="h-12 w-px bg-white/10" />
-          <div className="text-center">
-            <div className="text-4xl font-semibold text-white">1.5M+</div>
-            <div className="text-white/70">Monthly Users</div>
-          </div>
-          <div className="h-12 w-px bg-white/10" />
-          <div className="text-center">
-            <div className="text-4xl font-semibold text-white">10k+</div>
-            <div className="text-white/70">Success Stories</div>
-          </div>
         </motion.div>
       </div>
     </div>

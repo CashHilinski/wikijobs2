@@ -5,13 +5,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { UserButton, SignInButton, useAuth } from "@clerk/nextjs";
+import Image from 'next/image';
 
 const navItems = [
   { name: 'Home', href: '/' },
   { name: 'Job Match', href: '/find-jobs' },
-  { name: 'Partners', href: '/partners' },
-  { name: 'Donate', href: '/donate' },
-  { name: 'YIP', href: 'https://yipinstitute.org', external: true },
+  { name: 'Donate', href: 'https://givebutter.com/yip2025', external: true },
 ];
 
 const Navbar: FC = () => {
@@ -25,7 +24,6 @@ const Navbar: FC = () => {
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <img src="/logo.svg" alt="WikiJobs Logo" className="h-8 w-auto" />
               <span className="text-white font-semibold text-xl">WikiJobs</span>
             </Link>
           </div>

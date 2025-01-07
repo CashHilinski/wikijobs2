@@ -51,20 +51,13 @@ const CTASection: FC = () => {
 
             <motion.div 
               variants={fadeInUpVariant}
-              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+              className="flex justify-center items-center"
             >
               <Link
-                href="/get-started"
+                href="/find-jobs"
                 className="group relative inline-flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full text-lg font-medium hover:bg-white/90 transition-all duration-300"
               >
                 <span>Start Your Return</span>
-                <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
-              </Link>
-              <Link
-                href="/success-stories"
-                className="group relative inline-flex items-center gap-3 text-white/80 hover:text-white px-8 py-4 text-lg font-light tracking-wide transition-all duration-300"
-              >
-                <span>See Success Stories</span>
                 <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
               </Link>
             </motion.div>

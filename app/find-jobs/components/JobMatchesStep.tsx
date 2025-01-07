@@ -185,13 +185,14 @@ const JobDetailModal = ({
                       Apply Now
                     </a>
                     <button 
-                      onClick={() => {
-                        onClose();
+                      onClick={(e) => {
+                        e.stopPropagation();
                         onJobSelect(job);
                       }}
-                      className="text-white/60 hover:text-white transition-colors"
+                      className="text-white/60 hover:text-white transition-colors flex items-center gap-2"
                     >
-                      View Return Plan →
+                      <span>View Return Plan</span>
+                      <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                     </button>
                   </div>
                 </div>
@@ -668,9 +669,10 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
                     e.stopPropagation();
                     onJobSelect(job);
                   }}
-                  className="text-white/60 hover:text-white transition-colors"
+                  className="text-white/60 hover:text-white transition-colors flex items-center gap-2"
                 >
-                  View Return Plan →
+                  <span>View Return Plan</span>
+                  <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                 </button>
               </div>
             </div>
