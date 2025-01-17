@@ -41,7 +41,7 @@ const DemoVideo: FC = () => {
         >
           <video
             className="w-full h-full object-cover"
-            src="/demovideo.mp4"
+            src="/wikijobs_demovideo.mp4"
             loop
             muted
             playsInline

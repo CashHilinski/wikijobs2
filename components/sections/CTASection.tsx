@@ -13,10 +13,10 @@ const CTASection: FC = () => {
       ref={ref}
       initial="hidden"
       animate={controls}
-      className="relative py-32 bg-[#0a0a0a] overflow-hidden"
+      className="relative py-32 bg-gradient-to-b from-gray-50 to-white overflow-hidden"
     >
       {/* Background Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:150px_150px]"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:150px_150px]"></div>
 
       <motion.div 
         variants={fadeInUpVariant}
@@ -30,21 +30,21 @@ const CTASection: FC = () => {
               transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
               className="flex flex-col gap-2 mb-8"
             >
-              <span className="text-2xl font-light tracking-wide text-white/40">
+              <span className="text-2xl font-light tracking-wide text-gray-500">
                 Ready to return stronger?
               </span>
-              <div className="h-px w-12 bg-white/10 mx-auto"></div>
+              <div className="h-px w-12 bg-gray-200 mx-auto"></div>
             </motion.div>
 
             <motion.div 
               variants={fadeInUpVariant}
               className="space-y-6 mb-16"
             >
-              <h2 className="text-6xl md:text-7xl font-semibold text-white tracking-tight leading-tight">
+              <h2 className="text-6xl md:text-7xl font-semibold text-gray-900 tracking-tight leading-tight">
                 Your comeback<br />
                 starts here.
               </h2>
-              <p className="text-xl text-white/60 font-light tracking-wide max-w-xl mx-auto">
+              <p className="text-xl text-gray-600 font-light tracking-wide max-w-xl mx-auto">
                 Whether you've taken a break for family, health, or personal growth, our AI creates your personalized path back to professional success.
               </p>
             </motion.div>
@@ -55,7 +55,7 @@ const CTASection: FC = () => {
             >
               <Link
                 href="/find-jobs"
-                className="group relative inline-flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full text-lg font-medium hover:bg-white/90 transition-all duration-300"
+                className="group relative inline-flex items-center gap-3 bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-medium hover:bg-blue-700 transition-all duration-300"
               >
                 <span>Start Your Return</span>
                 <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
@@ -86,21 +86,14 @@ const CTASection: FC = () => {
                 variants={fadeInUpVariant}
                 className="group text-center"
               >
-                <div className="text-5xl font-medium text-white mb-2 tracking-tight">{number}</div>
-                <p className="text-lg font-medium text-white/80 mb-2 tracking-tight">{label}</p>
-                <p className="text-sm text-white/60 font-light tracking-wide">{desc}</p>
+                <div className="text-5xl font-medium text-gray-900 mb-2 tracking-tight">{number}</div>
+                <p className="text-lg font-medium text-gray-800 mb-2 tracking-tight">{label}</p>
+                <p className="text-sm text-gray-600 font-light tracking-wide">{desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.4, ease: [0.23, 1, 0.32, 1] }}
-        className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0a] to-transparent pointer-events-none"
-      />
     </motion.section>
   );
 };

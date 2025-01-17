@@ -83,10 +83,10 @@ const LoadingOverlay = () => {
               transition={{ duration: 0.5 }}
               className="space-y-4"
             >
-              <h3 className="text-3xl font-medium text-white">
+              <h3 className="text-3xl font-medium text-gray-900">
                 {loadingMessages[messageIndex]}
               </h3>
-              <p className="text-xl text-white/60">
+              <p className="text-xl text-gray-600">
                 Creating your personalized return-to-work plan
               </p>
             </motion.div>
@@ -98,7 +98,7 @@ const LoadingOverlay = () => {
               <motion.div
                 key={index}
                 className={`w-3 h-3 rounded-full ${
-                  index === messageIndex ? 'bg-blue-500' : 'bg-white/20'
+                  index === messageIndex ? 'bg-blue-500' : 'bg-gray-200'
                 }`}
                 animate={index === messageIndex ? { 
                   scale: [1, 1.2, 1],
@@ -135,7 +135,7 @@ const SkillGapPlanStep: FC<SkillGapPlanStepProps> = ({
           <div className="flex items-center justify-between mb-8">
             <button
               onClick={onBack}
-              className="text-white/60 hover:text-white transition-colors flex items-center gap-2"
+              className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2"
             >
               <span>←</span>
               <span>Back to Jobs</span>
@@ -144,11 +144,11 @@ const SkillGapPlanStep: FC<SkillGapPlanStepProps> = ({
 
           {/* Job Overview */}
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">Return Plan for {selectedJob.title}</h2>
-            <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-              <p className="text-white/70">Company: {selectedJob.company}</p>
-              <p className="text-white/70">Location: {selectedJob.location}</p>
-              <p className="text-white/70">Salary: {selectedJob.salary}</p>
+            <h2 className="text-2xl font-bold text-gray-900">Return Plan for {selectedJob.title}</h2>
+            <div className="p-4 rounded-lg bg-white shadow-sm border border-gray-200">
+              <p className="text-gray-600">Company: {selectedJob.company}</p>
+              <p className="text-gray-600">Location: {selectedJob.location}</p>
+              <p className="text-gray-600">Salary: {selectedJob.salary}</p>
             </div>
           </div>
 
@@ -156,17 +156,17 @@ const SkillGapPlanStep: FC<SkillGapPlanStepProps> = ({
             <>
               {/* Skills Analysis */}
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-white">Skills Analysis</h3>
-                <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-                  <h4 className="font-medium text-white mb-2">Gap Analysis</h4>
+                <h3 className="text-xl font-semibold text-gray-900">Skills Analysis</h3>
+                <div className="p-4 rounded-lg bg-white shadow-sm border border-gray-200">
+                  <h4 className="font-medium text-gray-900 mb-2">Gap Analysis</h4>
                   <MarkdownText 
                     content={skillGapPlan.gapAnalysis}
-                    className="text-white/70"
+                    className="text-gray-600"
                   />
                 </div>
-                <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-                  <h4 className="font-medium text-white mb-2">Required Skills</h4>
-                  <ul className="list-disc list-inside text-white/70 space-y-1">
+                <div className="p-4 rounded-lg bg-white shadow-sm border border-gray-200">
+                  <h4 className="font-medium text-gray-900 mb-2">Required Skills</h4>
+                  <ul className="list-disc list-inside text-gray-600 space-y-1">
                     {skillGapPlan.requiredSkills.map((skill, index) => (
                       <li key={index}>
                         <MarkdownText content={skill} />
@@ -178,11 +178,11 @@ const SkillGapPlanStep: FC<SkillGapPlanStepProps> = ({
 
               {/* Action Plan */}
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-white">Action Plan</h3>
+                <h3 className="text-xl font-semibold text-gray-900">Action Plan</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-                    <h4 className="font-medium text-white mb-2">Quick Wins (2 Weeks)</h4>
-                    <ul className="list-disc list-inside text-white/70 space-y-1">
+                  <div className="p-4 rounded-lg bg-white shadow-sm border border-gray-200">
+                    <h4 className="font-medium text-gray-900 mb-2">Quick Wins (2 Weeks)</h4>
+                    <ul className="list-disc list-inside text-gray-600 space-y-1">
                       {skillGapPlan.actionPlan.immediate.map((action, index) => (
                         <li key={index}>
                           <MarkdownText content={action} />
@@ -190,9 +190,9 @@ const SkillGapPlanStep: FC<SkillGapPlanStepProps> = ({
                       ))}
                     </ul>
                   </div>
-                  <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-                    <h4 className="font-medium text-white mb-2">3-Month Goals</h4>
-                    <ul className="list-disc list-inside text-white/70 space-y-1">
+                  <div className="p-4 rounded-lg bg-white shadow-sm border border-gray-200">
+                    <h4 className="font-medium text-gray-900 mb-2">3-Month Goals</h4>
+                    <ul className="list-disc list-inside text-gray-600 space-y-1">
                       {skillGapPlan.actionPlan.shortTerm.map((action, index) => (
                         <li key={index}>
                           <MarkdownText content={action} />
@@ -205,11 +205,11 @@ const SkillGapPlanStep: FC<SkillGapPlanStepProps> = ({
 
               {/* Resources */}
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-white">Recommended Resources</h3>
+                <h3 className="text-xl font-semibold text-gray-900">Recommended Resources</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-                    <h4 className="font-medium text-white mb-2">Courses</h4>
-                    <ul className="list-disc list-inside text-white/70 space-y-1">
+                  <div className="p-4 rounded-lg bg-white shadow-sm border border-gray-200">
+                    <h4 className="font-medium text-gray-900 mb-2">Courses</h4>
+                    <ul className="list-disc list-inside text-gray-600 space-y-1">
                       {skillGapPlan.resources.courses.map((course, index) => (
                         <li key={index}>
                           <MarkdownText content={course} />
@@ -217,45 +217,45 @@ const SkillGapPlanStep: FC<SkillGapPlanStepProps> = ({
                       ))}
                     </ul>
                   </div>
-                  <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-                    <h4 className="font-medium text-white mb-2">Certification</h4>
+                  <div className="p-4 rounded-lg bg-white shadow-sm border border-gray-200">
+                    <h4 className="font-medium text-gray-900 mb-2">Certification</h4>
                     <MarkdownText 
                       content={skillGapPlan.resources.certification}
-                      className="text-white/70"
+                      className="text-gray-600"
                     />
                   </div>
-                  <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-                    <h4 className="font-medium text-white mb-2">Networking</h4>
+                  <div className="p-4 rounded-lg bg-white shadow-sm border border-gray-200">
+                    <h4 className="font-medium text-gray-900 mb-2">Networking</h4>
                     <MarkdownText 
                       content={skillGapPlan.resources.networking}
-                      className="text-white/70"
+                      className="text-gray-600"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-                <p className="text-white/70">
-                  Estimated time to job readiness: <span className="text-white font-medium">{skillGapPlan.estimatedTimeframe} months</span>
+              <div className="p-4 rounded-lg bg-white shadow-sm border border-gray-200">
+                <p className="text-gray-600">
+                  Estimated time to job readiness: <span className="text-gray-900 font-medium">{skillGapPlan.estimatedTimeframe} months</span>
                 </p>
               </div>
             </>
           )}
 
           {/* Action Buttons */}
-          <div className="flex justify-between items-center mt-8 pt-8 border-t border-white/10">
+          <div className="flex justify-between items-center mt-8 pt-8 border-t border-gray-200">
             <div className="flex gap-4">
               <a
                 href={selectedJob.applyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-white/90 transition-colors"
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
               >
                 Apply Now
               </a>
               <button
                 onClick={() => window.print()}
-                className="px-6 py-3 rounded-lg font-medium border border-white/10 text-white hover:bg-white/5 transition-colors"
+                className="px-6 py-3 rounded-lg font-medium border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 Save Plan as PDF
               </button>
@@ -265,7 +265,7 @@ const SkillGapPlanStep: FC<SkillGapPlanStepProps> = ({
       )}
 
       {isLoading && (
-        <div className="absolute inset-0 bg-[#0a0a0a]">
+        <div className="absolute inset-0 bg-white">
           <LoadingOverlay />
         </div>
       )}

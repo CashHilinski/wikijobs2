@@ -139,46 +139,37 @@ const JobSearchPage: FC = () => {
   };
 
   return (
-    <main className="flex-1 flex flex-col bg-[#0a0a0a]">
+    <main className="flex-1 flex flex-col bg-white">
       <div className="relative flex-1 pt-32 pb-12">
         {/* Background effects - adding z-index to ensure they don't cover content */}
-        <div className="fixed inset-0 bg-[#0a0a0a] z-0"></div>
-        <div className="fixed inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100px_100px] z-0"></div>
+        <div className="fixed inset-0 bg-white z-0"></div>
+        <div className="fixed inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:100px_100px] z-0"></div>
 
-        {/* Content */}
-        <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-8 border border-white/10">
-            {error && (
-              <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
-                <p className="text-red-400">{error}</p>
-              </div>
-            )}
-            
-            {currentStep === 'form' && (
-              <PersonalInfoStep 
-                formData={formData} 
-                setFormData={setFormData}
-                onSubmit={handleSubmit}
-                isLoading={isLoading}
-              />
-            )}
-            {currentStep === 'matches' && (
-              <JobMatchesStep 
-                matchedJobs={matchedJobs}
-                onJobSelect={handleJobSelect}
-                setCurrentStep={setCurrentStep}
-                userLocation={formData.personal.location}
-              />
-            )}
-            {currentStep === 'plan' && (
-              <SkillGapPlanStep 
-                selectedJob={selectedJob}
-                skillGapPlan={skillGapPlan}
-                isLoading={isLoading}
-                onBack={handleBack}
-              />
-            )}
-          </div>
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+          {currentStep === 'form' && (
+            <PersonalInfoStep
+              formData={formData}
+              setFormData={setFormData}
+              onSubmit={handleSubmit}
+              isLoading={isLoading}
+            />
+          )}
+          {currentStep === 'matches' && (
+            <JobMatchesStep
+              matchedJobs={matchedJobs}
+              onJobSelect={handleJobSelect}
+              setCurrentStep={setCurrentStep}
+              userLocation={formData.preferences.location}
+            />
+          )}
+          {currentStep === 'plan' && selectedJob && (
+            <SkillGapPlanStep
+              selectedJob={selectedJob}
+              skillGapPlan={skillGapPlan}
+              isLoading={isLoading}
+              onBack={handleBack}
+            />
+          )}
         </div>
       </div>
     </main>

@@ -44,8 +44,8 @@ const features = [
 
 const FeaturesSection: FC = () => {
   return (
-    <section className="py-24 bg-black relative overflow-hidden">
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px]" />
+    <section className="py-24 bg-gray-50 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.05)_1px,transparent_1px)] bg-[size:100px_100px]" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-16">
@@ -54,7 +54,7 @@ const FeaturesSection: FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="text-3xl md:text-4xl font-semibold text-white mb-4"
+            className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4"
           >
             How It Works
           </motion.h2>
@@ -63,7 +63,7 @@ const FeaturesSection: FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-lg text-white/70 max-w-2xl mx-auto"
+            className="text-lg text-gray-600 max-w-2xl mx-auto"
           >
             Our comprehensive platform supports your journey back to work
           </motion.p>
@@ -77,19 +77,19 @@ const FeaturesSection: FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: index * 0.1 }}
-              className="relative p-8 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/5"
+              className="relative p-8 rounded-2xl bg-white shadow-sm border border-gray-200"
             >
-              <div className="absolute -inset-px bg-gradient-to-b from-white/[0.08] to-transparent rounded-2xl pointer-events-none" />
+              <div className="absolute -inset-px bg-gradient-to-b from-gray-50 to-transparent rounded-2xl pointer-events-none" />
               <div className="relative">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="p-2 rounded-lg bg-white/10 text-white">
+                  <div className="p-2 rounded-lg bg-blue-50 text-blue-600">
                     {feature.icon}
                   </div>
-                  <h3 className="text-xl font-medium text-white">
+                  <h3 className="text-xl font-medium text-gray-900">
                     {feature.title}
                   </h3>
                 </div>
-                <p className="text-white/70">
+                <p className="text-gray-600">
                   {feature.description}
                 </p>
               </div>
@@ -104,7 +104,7 @@ const FeaturesSection: FC = () => {
           transition={{ duration: 0.7, delay: 0.5 }}
           className="mt-16 text-center"
         >
-          <p className="text-white/50 text-sm">
+          <p className="text-gray-500 text-sm">
             Powered by advanced AI and machine learning algorithms
           </p>
         </motion.div>

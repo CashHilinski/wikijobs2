@@ -5,6 +5,8 @@ import { Dialog, Transition, Listbox } from '@headlessui/react';
 import { JobMatch, JobFilters, SortConfig, SortOption, FilterPreset } from '../types';
 import { filterJobs, sortJobs, getUniqueCategories, getSalaryRange } from '../../services/jobFilters';
 
+type WorkType = 'remote' | 'hybrid' | 'onsite';
+
 interface JobMatchesStepProps {
   matchedJobs: JobMatch[];
   onJobSelect: (job: JobMatch) => void;
@@ -265,8 +267,8 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
   return (
     <div className="space-y-8">
       <div className="text-center mb-12">
-        <h2 className="text-3xl font-semibold text-white mb-4">Your Matched Opportunities</h2>
-        <p className="text-white/60 text-lg font-light">
+        <h2 className="text-3xl font-semibold text-gray-900 mb-4">Your Matched Opportunities</h2>
+        <p className="text-gray-600 text-lg font-light">
           We've found these roles that align with your experience and return-to-work preferences.
         </p>
       </div>
@@ -275,7 +277,7 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
       <div className="flex justify-between items-center mb-6">
         <button
           onClick={() => setIsFiltersOpen(true)}
-          className="flex items-center space-x-2 text-white/80 hover:text-white"
+          className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
         >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
@@ -302,7 +304,7 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
             }))}
           >
             <div className="relative">
-              <Listbox.Button className="bg-white/5 text-white/80 px-4 py-2 rounded-lg flex items-center space-x-2">
+              <Listbox.Button className="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center space-x-2">
                 <span>Sort by: {sortOptions.find(opt => opt.value === sortConfig.field)?.label}</span>
                 <svg 
                   xmlns="http://www.w3.org/2000/svg" 
@@ -313,19 +315,23 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
                   <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                 </svg>
               </Listbox.Button>
+
               <Transition
-                as={Fragment}
-                leave="transition ease-in duration-100"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
+                enter="transition duration-100 ease-out"
+                enterFrom="transform scale-95 opacity-0"
+                enterTo="transform scale-100 opacity-100"
+                leave="transition duration-75 ease-out"
+                leaveFrom="transform scale-100 opacity-100"
+                leaveTo="transform scale-95 opacity-0"
               >
-                <Listbox.Options className="absolute z-10 mt-1 w-full bg-[#1a1a1a] rounded-lg shadow-lg">
+                <Listbox.Options className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
                   {sortOptions.map((option) => (
                     <Listbox.Option
                       key={option.value}
                       value={option.value}
                       className={({ active }) =>
-                        `${active ? 'bg-white/10' : ''} cursor-pointer select-none relative py-2 px-4 text-white/80`
+                        `${active ? 'bg-gray-100' : ''}
+                         cursor-pointer select-none relative py-2 pl-3 pr-9 text-gray-900`
                       }
                     >
                       {option.label}
@@ -341,7 +347,7 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
               ...prev,
               direction: prev.direction === 'asc' ? 'desc' : 'asc'
             }))}
-            className="text-white/80 hover:text-white"
+            className="text-gray-600 hover:text-gray-900"
           >
             {sortConfig.direction === 'asc' ? '↑' : '↓'}
           </button>
@@ -402,11 +408,10 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
         </div>
       )}
 
-      {/* Filters Modal */}
-      <Transition appear show={isFiltersOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-50" onClose={() => setIsFiltersOpen(false)}>
+      {/* Filter Dialog */}
+      <Transition show={isFiltersOpen} as={Fragment}>
+        <Dialog onClose={() => setIsFiltersOpen(false)} className="relative z-50">
           <Transition.Child
-            as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0"
             enterTo="opacity-100"
@@ -414,13 +419,12 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black/90 backdrop-blur-sm" />
+            <div className="fixed inset-0 bg-black/30" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4">
               <Transition.Child
-                as={Fragment}
                 enter="ease-out duration-300"
                 enterFrom="opacity-0 scale-95"
                 enterTo="opacity-100 scale-100"
@@ -428,32 +432,15 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-[#1a1a1a] p-6 shadow-xl transition-all">
-                  <Dialog.Title className="text-lg font-medium text-white mb-4">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 shadow-xl transition-all">
+                  <Dialog.Title className="text-lg font-medium text-gray-900 mb-4">
                     Filter Jobs
                   </Dialog.Title>
-
-                  {/* Filter Presets */}
-                  <div className="mb-6">
-                    <h3 className="text-sm font-medium text-white/90 mb-3">Quick Filters</h3>
-                    <div className="grid grid-cols-2 gap-3">
-                      {filterPresets.map(preset => (
-                        <button
-                          key={preset.id}
-                          onClick={() => applyPreset(preset)}
-                          className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors text-left"
-                        >
-                          <h4 className="text-sm font-medium text-white">{preset.name}</h4>
-                          <p className="text-xs text-white/60 mt-1">{preset.description}</p>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
 
                   <div className="space-y-6">
                     {/* Return-to-work features */}
                     <div className="space-y-4">
-                      <h3 className="text-sm font-medium text-white/90">Return-to-Work Features</h3>
+                      <h3 className="text-sm font-medium text-gray-700">Return-to-Work Features</h3>
                       <div className="space-y-2">
                         <label className="flex items-center space-x-2">
                           <input
@@ -463,9 +450,9 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
                               ...prev,
                               returnToWork: e.target.checked
                             }))}
-                            className="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500"
+                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                           />
-                          <span className="text-white/80">Return-to-Work Program</span>
+                          <span className="text-gray-700">Return-to-Work Program</span>
                         </label>
                         <label className="flex items-center space-x-2">
                           <input
@@ -475,9 +462,9 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
                               ...prev,
                               flexibleHours: e.target.checked
                             }))}
-                            className="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500"
+                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                           />
-                          <span className="text-white/80">Flexible Hours</span>
+                          <span className="text-gray-700">Flexible Hours</span>
                         </label>
                         <label className="flex items-center space-x-2">
                           <input
@@ -487,78 +474,43 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
                               ...prev,
                               mentorship: e.target.checked
                             }))}
-                            className="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500"
+                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                           />
-                          <span className="text-white/80">Mentorship</span>
+                          <span className="text-gray-700">Mentorship Available</span>
                         </label>
                       </div>
                     </div>
 
                     {/* Work Type */}
                     <div className="space-y-4">
-                      <h3 className="text-sm font-medium text-white/90">Work Type</h3>
+                      <h3 className="text-sm font-medium text-gray-700">Work Type</h3>
                       <div className="space-y-2">
-                        {['remote', 'hybrid', 'onsite'].map((type) => (
-                          <label key={type} className="flex items-center space-x-2">
+                        {[
+                          { label: 'Remote', value: 'remote' as WorkType },
+                          { label: 'Hybrid', value: 'hybrid' as WorkType },
+                          { label: 'On-site', value: 'onsite' as WorkType }
+                        ].map(({ label, value }) => (
+                          <label key={value} className="flex items-center space-x-2">
                             <input
                               type="checkbox"
-                              checked={filters.workTypes.includes(type as any)}
+                              checked={filters.workTypes.includes(value)}
                               onChange={(e) => setFilters(prev => ({
                                 ...prev,
                                 workTypes: e.target.checked
-                                  ? [...prev.workTypes, type as any]
-                                  : prev.workTypes.filter(t => t !== type)
+                                  ? [...prev.workTypes, value]
+                                  : prev.workTypes.filter(t => t !== value)
                               }))}
-                              className="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500"
+                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                             />
-                            <span className="text-white/80 capitalize">{type}</span>
+                            <span className="text-gray-700">{label}</span>
                           </label>
                         ))}
                       </div>
                     </div>
 
-                    {/* Salary Range */}
-                    <div className="space-y-4">
-                      <h3 className="text-sm font-medium text-white/90">Salary Range</h3>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-white/60 text-sm mb-1">Min</label>
-                          <input
-                            type="number"
-                            value={filters.salaryRange.min || ''}
-                            onChange={(e) => setFilters(prev => ({
-                              ...prev,
-                              salaryRange: {
-                                ...prev.salaryRange,
-                                min: e.target.value ? parseInt(e.target.value) : null
-                              }
-                            }))}
-                            className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-white"
-                            placeholder={minSalary.toString()}
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-white/60 text-sm mb-1">Max</label>
-                          <input
-                            type="number"
-                            value={filters.salaryRange.max || ''}
-                            onChange={(e) => setFilters(prev => ({
-                              ...prev,
-                              salaryRange: {
-                                ...prev.salaryRange,
-                                max: e.target.value ? parseInt(e.target.value) : null
-                              }
-                            }))}
-                            className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-white"
-                            placeholder={maxSalary.toString()}
-                          />
-                        </div>
-                      </div>
-                    </div>
-
                     {/* Categories */}
                     <div className="space-y-4">
-                      <h3 className="text-sm font-medium text-white/90">Categories</h3>
+                      <h3 className="text-sm font-medium text-gray-700">Categories</h3>
                       <div className="space-y-2 max-h-40 overflow-y-auto">
                         {categories.map((category) => (
                           <label key={category} className="flex items-center space-x-2">
@@ -571,9 +523,9 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
                                   ? [...prev.categories, category]
                                   : prev.categories.filter(c => c !== category)
                               }))}
-                              className="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500"
+                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                             />
-                            <span className="text-white/80">{category}</span>
+                            <span className="text-gray-700">{category}</span>
                           </label>
                         ))}
                       </div>
@@ -592,13 +544,13 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
                           categories: []
                         });
                       }}
-                      className="text-white/60 hover:text-white"
+                      className="text-gray-600 hover:text-gray-900"
                     >
                       Reset
                     </button>
                     <button
                       onClick={() => setIsFiltersOpen(false)}
-                      className="bg-white text-black px-4 py-2 rounded-lg"
+                      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
                     >
                       Apply Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
                     </button>
@@ -616,51 +568,51 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
           {filteredJobs.map((job, index) => (
             <div 
               key={index}
-              className="bg-white/5 rounded-xl p-6 border border-white/10 hover:bg-white/10 transition-colors cursor-pointer"
+              className="bg-white rounded-xl p-6 border border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer shadow-sm"
               onClick={() => setSelectedJobForDetail(job)}
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-xl font-medium text-white">{job.title}</h3>
+                  <h3 className="text-xl font-medium text-gray-900">{job.title}</h3>
                   <div className="space-y-1 mt-2">
-                    <p className="text-white/60">{job.company}</p>
-                    <p className="text-white/60">{job.location}</p>
-                    <p className="text-white/60">{job.salary}</p>
-                    <p className="text-white/60">Posted: {job.postedDate}</p>
-                    <p className="text-white/60">{job.jobType} • {job.category}</p>
+                    <p className="text-gray-600">{job.company}</p>
+                    <p className="text-gray-600">{job.location}</p>
+                    <p className="text-gray-600">{job.salary}</p>
+                    <p className="text-gray-600">Posted: {job.postedDate}</p>
+                    <p className="text-gray-600">{job.jobType} • {job.category}</p>
                   </div>
                 </div>
-                <div className="bg-white/10 px-3 py-1 rounded-full">
-                  <span className="text-white/90">{job.matchScore}% Match</span>
+                <div className="bg-blue-50 px-3 py-1 rounded-full">
+                  <span className="text-blue-600">{job.matchScore}% Match</span>
                 </div>
               </div>
               
               <div className="flex gap-3 mb-4">
                 {job.returnFriendly.mentorship && (
-                  <span className="bg-blue-500/20 text-blue-200 px-2 py-1 rounded text-sm">
+                  <span className="bg-blue-50 text-blue-600 px-2 py-1 rounded text-sm">
                     Mentorship
                   </span>
                 )}
                 {job.returnFriendly.flexibleHours && (
-                  <span className="bg-green-500/20 text-green-200 px-2 py-1 rounded text-sm">
+                  <span className="bg-green-50 text-green-600 px-2 py-1 rounded text-sm">
                     Flexible Hours
                   </span>
                 )}
                 {job.returnFriendly.returnProgram && (
-                  <span className="bg-purple-500/20 text-purple-200 px-2 py-1 rounded text-sm">
+                  <span className="bg-purple-50 text-purple-600 px-2 py-1 rounded text-sm">
                     Return Program
                   </span>
                 )}
               </div>
 
-              <p className="text-white/70 text-sm mb-6">{job.description}</p>
+              <p className="text-gray-600 text-sm mb-6">{job.description}</p>
               
               <div className="flex gap-4">
                 <a 
                   href={job.applyUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white text-black px-4 py-2 rounded-lg font-medium hover:bg-white/90 transition-colors"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
                 >
                   Apply Now
                 </a>
@@ -669,7 +621,7 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
                     e.stopPropagation();
                     onJobSelect(job);
                   }}
-                  className="text-white/60 hover:text-white transition-colors flex items-center gap-2"
+                  className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2"
                 >
                   <span>View Return Plan</span>
                   <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
@@ -680,10 +632,10 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
         </div>
       ) : (
         <div className="text-center py-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 mb-6">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-6">
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
-              className="h-8 w-8 text-white/40" 
+              className="h-8 w-8 text-gray-400" 
               fill="none" 
               viewBox="0 0 24 24" 
               stroke="currentColor"
@@ -696,13 +648,13 @@ export const JobMatchesStep: FC<JobMatchesStepProps> = ({
               />
             </svg>
           </div>
-          <h3 className="text-xl font-medium text-white mb-3">No Matches Found</h3>
-          <p className="text-white/60 max-w-md mx-auto">
+          <h3 className="text-xl font-medium text-gray-900 mb-3">No Matches Found</h3>
+          <p className="text-gray-600 max-w-md mx-auto">
             We couldn't find any jobs matching your criteria. Try adjusting your filters or check back later for new opportunities.
           </p>
           <button
             onClick={() => setCurrentStep('form')}
-            className="mt-6 text-white/60 hover:text-white transition-colors"
+            className="mt-6 text-gray-600 hover:text-gray-900 transition-colors"
           >
             ← Modify Search
           </button>

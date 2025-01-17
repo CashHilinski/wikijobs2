@@ -33,8 +33,8 @@ const steps = [
 
 const TimelineSection: FC = () => {
   return (
-    <section className="py-24 bg-gradient-to-b from-[#0a0a0a] to-black relative overflow-hidden">
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px]" />
+    <section className="py-24 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:100px_100px]" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-16">
@@ -43,7 +43,7 @@ const TimelineSection: FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="text-3xl md:text-4xl font-semibold text-white mb-4"
+            className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4"
           >
             Your Journey Back
           </motion.h2>
@@ -52,7 +52,7 @@ const TimelineSection: FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-lg text-white/70 max-w-2xl mx-auto"
+            className="text-lg text-gray-600 max-w-2xl mx-auto"
           >
             A clear path to restart your career with confidence
           </motion.p>
@@ -60,7 +60,7 @@ const TimelineSection: FC = () => {
 
         <div className="relative">
           {/* Timeline line */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-white/10 transform -translate-x-1/2" />
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gray-200 transform -translate-x-1/2" />
 
           <div className="space-y-12">
             {steps.map((step, index) => (
@@ -75,20 +75,20 @@ const TimelineSection: FC = () => {
                 }`}
               >
                 {/* Timeline dot */}
-                <div className="absolute left-4 md:left-1/2 w-4 h-4 bg-white rounded-full transform -translate-x-1/2 border-4 border-black" />
+                <div className="absolute left-4 md:left-1/2 w-4 h-4 bg-white rounded-full transform -translate-x-1/2 border-4 border-blue-600" />
 
                 {/* Content */}
                 <div className={`flex-1 ${index % 2 === 0 ? 'md:pr-16' : 'md:pl-16'} pl-12`}>
-                  <div className="relative p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/5">
-                    <div className="absolute -inset-px bg-gradient-to-b from-white/[0.08] to-transparent rounded-2xl pointer-events-none" />
+                  <div className="relative p-6 rounded-2xl bg-white shadow-sm border border-gray-200">
+                    <div className="absolute -inset-px bg-gradient-to-b from-gray-50 to-transparent rounded-2xl pointer-events-none" />
                     <div className="relative">
-                      <div className="text-sm font-medium text-white/40 mb-1">
+                      <div className="text-sm font-medium text-gray-500 mb-1">
                         Step {step.number}
                       </div>
-                      <h3 className="text-xl font-medium text-white mb-2">
+                      <h3 className="text-xl font-medium text-gray-900 mb-2">
                         {step.title}
                       </h3>
-                      <p className="text-white/70">
+                      <p className="text-gray-600">
                         {step.description}
                       </p>
                     </div>
@@ -109,7 +109,7 @@ const TimelineSection: FC = () => {
           transition={{ duration: 0.7, delay: 0.5 }}
           className="mt-16 text-center"
         >
-          <p className="text-white/50 text-sm">
+          <p className="text-gray-500 text-sm">
             Each step is designed to maximize your chances of successful career reentry
           </p>
         </motion.div>
