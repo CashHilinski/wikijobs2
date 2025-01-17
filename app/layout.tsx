@@ -28,19 +28,15 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="min-h-screen flex flex-col">
+      <html lang="en">
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
           <Navbar />
           <Template>
-            <main className="flex-1 flex flex-col overflow-hidden bg-black">
-              {children}
-            </main>
+            {children}
           </Template>
           <Footer />
-        </div>
-      </body>
-    </html>
+        </body>
+      </html>
     </ClerkProvider>
   );
 }

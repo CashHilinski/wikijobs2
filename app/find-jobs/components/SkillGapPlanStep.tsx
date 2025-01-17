@@ -43,38 +43,31 @@ const LoadingOverlay = () => {
       setMessageIndex((prev) => (prev + 1) % loadingMessages.length);
     }, 2000);
     
-    document.body.style.overflow = 'hidden';
-    
     return () => {
       clearInterval(messageInterval);
-      document.body.style.overflow = 'auto';
     };
   }, []);
 
   return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/90 backdrop-blur-lg z-[9999] flex items-center justify-center"
-      style={{ minHeight: '100vh' }}
+    <div 
+      className="absolute inset-0 z-[9999] flex items-center justify-center"
     >
-      <div className="w-full max-w-lg mx-auto px-6 py-12">
+      <div className="w-full max-w-lg mx-auto px-6 py-12 mt-[28rem]">
         <div className="space-y-12 text-center">
           {/* Animated Logo/Icon */}
           <div className="relative w-32 h-32 mx-auto">
             <motion.div
-              className="absolute inset-0 rounded-full border-4 border-t-4 border-white/20 border-t-blue-500"
+              className="absolute inset-0 rounded-full border-t-4 border-t-blue-500"
               animate={{ rotate: 360 }}
               transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
             />
             <motion.div
-              className="absolute inset-4 rounded-full border-4 border-t-4 border-white/20 border-t-purple-500"
+              className="absolute inset-4 rounded-full border-t-4 border-t-purple-500"
               animate={{ rotate: -360 }}
               transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
             />
             <motion.div
-              className="absolute inset-8 rounded-full border-4 border-t-4 border-white/20 border-t-green-500"
+              className="absolute inset-8 rounded-full border-t-4 border-t-green-500"
               animate={{ rotate: 360 }}
               transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
             />
@@ -117,7 +110,7 @@ const LoadingOverlay = () => {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -131,10 +124,6 @@ const SkillGapPlanStep: FC<SkillGapPlanStepProps> = ({
 
   return (
     <>
-      <AnimatePresence>
-        {isLoading && <LoadingOverlay />}
-      </AnimatePresence>
-
       {!isLoading && skillGapPlan && (
         <motion.div 
           initial={{ opacity: 0 }}
@@ -273,6 +262,12 @@ const SkillGapPlanStep: FC<SkillGapPlanStepProps> = ({
             </div>
           </div>
         </motion.div>
+      )}
+
+      {isLoading && (
+        <div className="absolute inset-0 bg-[#0a0a0a]">
+          <LoadingOverlay />
+        </div>
       )}
     </>
   );
