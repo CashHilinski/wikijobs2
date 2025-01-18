@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -17,6 +17,27 @@ const Navbar: FC = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const { isSignedIn } = useAuth();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            <div className="flex items-center">
+              <Link href="/" className="flex items-center space-x-2">
+                <span className="text-gray-900 font-semibold text-xl">WikiJobs</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
+    );
+  }
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-200">
@@ -25,7 +46,6 @@ const Navbar: FC = () => {
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
               <span className="text-gray-900 font-semibold text-xl">WikiJobs</span>
-              <span className="text-gray-600 font-semibold text-xs">beta</span>
             </Link>
           </div>
 

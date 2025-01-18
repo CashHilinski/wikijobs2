@@ -1,16 +1,27 @@
 "use client";
 
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const DemoVideo: FC = () => {
   const [isZoomed, setIsZoomed] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleZoomToggle = () => {
     setIsZoomed(!isZoomed);
     setIsPlaying(!isZoomed);
   };
+
+  if (!isMounted) {
+    return (
+      <div className="aspect-video w-full max-w-4xl mx-auto rounded-2xl overflow-hidden bg-gray-100" />
+    );
+  }
 
   return (
     <>

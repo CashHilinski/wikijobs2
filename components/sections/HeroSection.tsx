@@ -16,6 +16,8 @@ const DemoVideo = dynamic(() => import('@/components/DemoVideo'), {
 
 const HeroSection = () => (
   <section className="relative min-h-screen flex items-center overflow-hidden bg-white">
+    {/* Remove or comment out these two motion.div elements that create the shine effect */}
+    {/*
     <motion.div
       variants={backgroundVariant}
       initial="hidden"
@@ -28,6 +30,7 @@ const HeroSection = () => (
       animate="visible"
       className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:150px_150px]"
     />
+    */}
     
     <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
       <div className="text-center">
@@ -67,28 +70,66 @@ const HeroSection = () => (
         >
           <Link 
             href="/find-jobs"
-            className="group relative inline-flex items-center gap-3 bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-medium hover:bg-blue-700 transition-all duration-300"
+            className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-full text-lg font-medium bg-blue-600 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/30 active:translate-y-0 active:shadow-md"
           >
-            <span>Find Your Match</span>
-            <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+            <motion.span 
+              className="relative flex items-center gap-2"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span>Find Your Match</span>
+              <motion.span
+                className="transform"
+                animate={{ x: [0, 2, 0] }}
+                transition={{ 
+                  duration: 1.5, 
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  ease: "easeInOut"
+                }}
+              >
+                →
+              </motion.span>
+            </motion.span>
           </Link>
+          
           <Link 
             href="mailto:arlan@hanlantech.net"
-            className="group relative inline-flex items-center gap-3 text-gray-600 hover:text-gray-900 px-8 py-4 text-lg font-light tracking-wide transition-all duration-300"
+            className="group relative inline-flex items-center gap-3 px-8 py-4 text-lg font-medium text-gray-600 transition-all duration-300 hover:text-gray-900"
           >
-            <span>Talk to Us</span>
-            <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+            <motion.span 
+              className="relative flex items-center gap-2"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span>Talk to Us</span>
+              <motion.span
+                className="transform"
+                animate={{ x: [0, 2, 0] }}
+                transition={{ 
+                  duration: 1.5, 
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  ease: "easeInOut",
+                  delay: 0.2 // Slightly offset from the first button
+                }}
+              >
+                →
+              </motion.span>
+            </motion.span>
           </Link>
         </motion.div>
       </div>
     </div>
 
+    {/* Remove this bottom gradient div
     <motion.div
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, delay: 0.8, ease: [0.23, 1, 0.32, 1] }}
       className="absolute bottom-0 left-0 right-0 h-[400px] bg-gradient-to-t from-white to-transparent pointer-events-none"
     />
+    */}
   </section>
 );
 
